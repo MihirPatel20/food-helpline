@@ -13,19 +13,7 @@ import Register from "./pages/auth/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import HomePage from "./pages/home/HomePage";
-
-// Create theme
-const theme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#dc004e",
-    },
-  },
-});
+import theme from "./theme";
 
 function App() {
   return (

@@ -2,6 +2,11 @@
 
 A full-stack web application to minimize food waste by connecting food donors with NGOs and food banks.
 
+Admin
+Donar
+Agent
+regular
+
 ## 🌟 Overview
 
 Food Helpline is a platform that helps reduce food waste by creating an efficient system for food donation and distribution. It connects restaurants, event organizers, and individuals who have surplus food with NGOs and food banks that can distribute it to those in need.

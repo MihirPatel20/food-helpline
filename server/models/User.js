@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
 const locationSchema = new mongoose.Schema({
   address: String,

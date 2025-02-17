@@ -10,19 +10,14 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   TextField,
   InputAdornment,
-  Chip,
-  Tooltip,
-  IconButton,
   Divider,
 } from "@mui/material";
 import {
   Warning as WarningIcon,
   TrendingUp as TrendingUpIcon,
   ShoppingCart as ShoppingCartIcon,
-  LocalDining as LocalDiningIcon,
   AttachMoney as AttachMoneyIcon,
   Search as SearchIcon,
   Category as CategoryIcon,
@@ -37,6 +32,7 @@ import {
 } from "@mui/icons-material";
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
+import { activityFeed, expiringItems } from "./dummyData";
 
 // Brand colors
 const brandColors = {
@@ -52,34 +48,11 @@ const HomePage = () => {
   const [actionSearchQuery, setActionSearchQuery] = useState("");
   const [userData, setUserData] = useState({
     name: "John",
-    totalItems: 45,
+    totalItems: 120,
     expiringItems: 5,
     moneySaved: 250,
+    totalDonations: 75, // New stat for total donations
   });
-
-  // Dummy data for expiring items
-  const expiringItems = [
-    { id: 1, name: "Milk", expiryDate: "2024-03-01", daysLeft: 2 },
-    { id: 2, name: "Bread", expiryDate: "2024-03-02", daysLeft: 3 },
-    { id: 3, name: "Yogurt", expiryDate: "2024-03-03", daysLeft: 4 },
-  ];
-
-  // Dummy data for activity feed
-  const activityFeed = [
-    {
-      id: 1,
-      action: "Added new item",
-      item: "Apples",
-      timestamp: "2 hours ago",
-    },
-    {
-      id: 2,
-      action: "Updated quantity",
-      item: "Milk",
-      timestamp: "4 hours ago",
-    },
-    { id: 3, action: "Removed item", item: "Bread", timestamp: "1 day ago" },
-  ];
 
   const quickStats = [
     {
@@ -99,6 +72,12 @@ const HomePage = () => {
       value: `$${userData.moneySaved}`,
       icon: <AttachMoneyIcon />,
       color: brandColors.success,
+    },
+    {
+      title: "Total Donations",
+      value: userData.totalDonations,
+      icon: <FavoriteIcon />,
+      color: brandColors.secondary,
     },
   ];
 
@@ -174,14 +153,15 @@ const HomePage = () => {
     },
   ];
 
-  const filteredActions = Object.values(quickActions)
-    .flatMap((category) =>
-      category.actions.filter(
-        (action) =>
-          action.title.toLowerCase().includes(actionSearchQuery.toLowerCase()) ||
-          action.description.toLowerCase().includes(actionSearchQuery.toLowerCase())
-      )
-    );
+  const filteredActions = Object.values(quickActions).flatMap((category) =>
+    category.actions.filter(
+      (action) =>
+        action.title.toLowerCase().includes(actionSearchQuery.toLowerCase()) ||
+        action.description
+          .toLowerCase()
+          .includes(actionSearchQuery.toLowerCase())
+    )
+  );
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
@@ -189,9 +169,21 @@ const HomePage = () => {
 
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
         {/* Personal Welcome + Daily Summary */}
-        <Paper 
-          sx={{ 
-            p: 3, 
+        <Paper
+          sx={{
+            p: 3,
+            mb: 3,
+            background: `linear-gradient(45deg, ${brandColors.secondary}15, ${brandColors.warning}15)`,
+            borderLeft: `4px solid ${brandColors.secondary}`,
+          }}
+        >
+          <Typography variant="h4">
+            *Note: The data displayed here is for demonstration purposes only.*
+          </Typography>
+        </Paper>
+        <Paper
+          sx={{
+            p: 3,
             mb: 3,
             background: `linear-gradient(45deg, ${brandColors.primary}15, ${brandColors.info}15)`,
             borderLeft: `4px solid ${brandColors.primary}`,
@@ -203,9 +195,6 @@ const HomePage = () => {
           <Typography variant="body1" color="text.secondary">
             You have {userData.expiringItems} items expiring soon and saved $
             {userData.moneySaved} this month.
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            *Note: The data displayed here is dummy data.*
           </Typography>
         </Paper>
 
@@ -265,8 +254,8 @@ const HomePage = () => {
 
             {/* Expiring Items Section */}
             <Grid item xs={12}>
-              <Paper 
-                sx={{ 
+              <Paper
+                sx={{
                   p: 2,
                   background: `linear-gradient(45deg, ${brandColors.warning}05, ${brandColors.warning}10)`,
                   borderLeft: `4px solid ${brandColors.warning}`,
@@ -274,9 +263,7 @@ const HomePage = () => {
               >
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <WarningIcon sx={{ color: brandColors.warning, mr: 1 }} />
-                  <Typography variant="h6">
-                    Expiring Items
-                  </Typography>
+                  <Typography variant="h6">Expiring Items</Typography>
                 </Box>
                 <Grid container spacing={2}>
                   {expiringItems.map((item) => (
@@ -291,28 +278,45 @@ const HomePage = () => {
                         }}
                       >
                         <CardContent>
-                          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                            <WarningIcon 
-                              sx={{ 
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
+                          >
+                            <WarningIcon
+                              sx={{
                                 mr: 1,
-                                color: item.daysLeft <= 2 ? brandColors.secondary : brandColors.warning,
-                              }} 
+                                color:
+                                  item.daysLeft <= 2
+                                    ? brandColors.secondary
+                                    : brandColors.warning,
+                              }}
                             />
                             <Typography variant="h6">
-                              {item.name}
+                              {item.name} - {item.quantity}
                             </Typography>
                           </Box>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              color: item.daysLeft <= 2 ? brandColors.secondary : "text.secondary",
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color:
+                                item.daysLeft <= 2
+                                  ? brandColors.secondary
+                                  : "text.secondary",
                               fontWeight: item.daysLeft <= 2 ? 500 : 400,
                             }}
                           >
                             Expires in {item.daysLeft} days
                           </Typography>
-                          <Typography variant="caption" color="text.secondary" display="block">
-                            Expiry: {new Date(item.expiryDate).toLocaleDateString()}
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            display="block"
+                          >
+                            Expiry:{" "}
+                            {new Date(item.expiryDate).toLocaleDateString()}
                           </Typography>
                         </CardContent>
                       </Card>
@@ -324,10 +328,10 @@ const HomePage = () => {
 
             {/* Quick Actions Section */}
             <Grid item xs={12}>
-              <Paper variant="outlined" 
-                sx={{ 
+              <Paper
+                variant="outlined"
+                sx={{
                   p: 2,
-                  // background: `linear-gradient(45deg, #4CAF5005, #4CAF5010)`,
                   borderTop: `4px solid #4CAF50`,
                 }}
               >
@@ -350,13 +354,17 @@ const HomePage = () => {
                     }}
                     sx={{ mb: 2 }}
                   />
-                  
+
                   {/* Recently Used Section */}
                   {!actionSearchQuery && (
                     <>
-                      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                      >
                         <HistoryIcon sx={{ mr: 1, color: "text.secondary" }} />
-                        <Typography variant="subtitle1">Recently Used</Typography>
+                        <Typography variant="subtitle1">
+                          Recently Used
+                        </Typography>
                       </Box>
                       <Grid container spacing={2} sx={{ mb: 3 }}>
                         {recentlyUsed.map((action, index) => (
@@ -373,7 +381,9 @@ const HomePage = () => {
                               onClick={action.action}
                             >
                               <CardContent>
-                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Box
+                                  sx={{ display: "flex", alignItems: "center" }}
+                                >
                                   <Box sx={{ mr: 2 }}>{action.icon}</Box>
                                   <Box>
                                     <Typography variant="subtitle1">
@@ -412,7 +422,9 @@ const HomePage = () => {
                             onClick={action.action}
                           >
                             <CardContent>
-                              <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
                                 <Box sx={{ mr: 2 }}>{action.icon}</Box>
                                 <Box>
                                   <Typography variant="subtitle1">
@@ -442,10 +454,7 @@ const HomePage = () => {
                           }}
                         >
                           {category.icon}
-                          <Typography
-                            variant="subtitle1"
-                            sx={{ ml: 1 }}
-                          >
+                          <Typography variant="subtitle1" sx={{ ml: 1 }}>
                             {category.title}
                           </Typography>
                         </Box>
@@ -505,11 +514,11 @@ const HomePage = () => {
 
           {/* Activity Feed Section */}
           <Grid item xs={12} md={4}>
-            <Paper 
-              sx={{ 
-                p: 2, 
+            <Paper
+              sx={{
+                p: 2,
                 height: "100%",
-                background: `linear-gradient(45deg, ${brandColors.info}05, ${brandColors.primary}05)`,
+                background: `linear-gradient(45deg, ${brandColors.primary}15, ${brandColors.info}15)`,
               }}
             >
               <Typography variant="h6" gutterBottom>

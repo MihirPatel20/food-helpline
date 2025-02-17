@@ -13,13 +13,28 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  InputAdornment,
+  IconButton,
+  useTheme,
+  CircularProgress,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { 
+  Person, 
+  Email, 
+  Lock, 
+  Visibility, 
+  VisibilityOff,
+  Business 
+} from '@mui/icons-material';
 import { authService } from '../../services/api';
 
 const Register = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: 'Mihir',
     email: 'mihir@gmail.com',
@@ -82,15 +97,35 @@ const Register = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Sign Up
+        <Paper
+          elevation={6}
+          sx={{
+            p: 4,
+            width: '100%',
+            borderRadius: 2,
+            background: theme.palette.background.paper,
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ 
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              mb: 3
+            }}
+          >
+            Create Account
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
@@ -105,6 +140,14 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 2 }}
             />
             <TextField
               margin="normal"
@@ -117,8 +160,16 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 2 }}
             />
-            <FormControl fullWidth margin="normal" required>
+            <FormControl fullWidth margin="normal" required sx={{ mb: 2 }}>
               <InputLabel id="user-type-label">User Type</InputLabel>
               <Select
                 labelId="user-type-label"
@@ -128,6 +179,11 @@ const Register = () => {
                 label="User Type"
                 onChange={handleChange}
                 disabled={loading}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Business color="primary" />
+                  </InputAdornment>
+                }
               >
                 <MenuItem value="restaurant">Restaurant</MenuItem>
                 <MenuItem value="ngo">NGO</MenuItem>
@@ -140,11 +196,29 @@ const Register = () => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               value={formData.password}
               onChange={handleChange}
               disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock color="primary" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 2 }}
             />
             <TextField
               margin="normal"
@@ -152,36 +226,89 @@ const Register = () => {
               fullWidth
               name="confirmPassword"
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               disabled={loading}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock color="primary" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ mb: 3 }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 2,
+                mb: 3,
+                py: 1.5,
+                borderRadius: 2,
+                position: 'relative'
+              }}
               disabled={loading}
             >
-              Sign Up
+              {loading ? (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                  }}
+                />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
-            <Typography variant="body2" align="center">
+            <Typography variant="body1" align="center" sx={{ color: 'text.secondary' }}>
               Already have an account?{' '}
-              <Link component={RouterLink} to="/login">
+              <Link
+                component={RouterLink}
+                to="/login"
+                sx={{
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
                 Sign In
               </Link>
             </Typography>
           </Box>
         </Paper>
       </Box>
-      <Snackbar 
-        open={!!error} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
         onClose={() => setError('')}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Alert severity="error" onClose={() => setError('')}>
+        <Alert 
+          severity="error" 
+          onClose={() => setError('')}
+          variant="filled"
+          elevation={6}
+        >
           {error}
         </Alert>
       </Snackbar>
@@ -189,4 +316,4 @@ const Register = () => {
   );
 };
 
-export default Register; 
+export default Register;
