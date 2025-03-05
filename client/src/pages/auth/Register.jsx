@@ -36,11 +36,11 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: 'Mihir',
-    email: 'mihir@gmail.com',
-    password: '123456',
-    confirmPassword: '123456',
-    userType: 'restaurant'
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    userType: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
