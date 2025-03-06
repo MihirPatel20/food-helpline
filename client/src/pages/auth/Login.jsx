@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Email, Lock, Visibility, VisibilityOff } from "@mui/icons-material";
-import { authService } from "../../services/api";
+import { authApi } from "../../services/api";
 
 const Login = () => {
   const theme = useTheme();
@@ -43,7 +43,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await authService.login(formData.email, formData.password);
+      await authApi.login(formData.email, formData.password);
       navigate("/home");
     } catch (err) {
       setError(
@@ -80,15 +80,15 @@ const Login = () => {
             variant="h4"
             align="center"
             gutterBottom
-            sx={{ 
+            sx={{
               fontWeight: 600,
               color: theme.palette.primary.main,
-              mb: 3
+              mb: 3,
             }}
           >
             Welcome Back
           </Typography>
-          
+
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -151,7 +151,7 @@ const Login = () => {
                 mb: 3,
                 py: 1.5,
                 borderRadius: 2,
-                position: 'relative'
+                position: "relative",
               }}
               disabled={loading}
             >
@@ -159,27 +159,31 @@ const Login = () => {
                 <CircularProgress
                   size={24}
                   sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-12px',
-                    marginLeft: '-12px',
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
                   }}
                 />
               ) : (
                 "Sign In"
               )}
             </Button>
-            <Typography variant="body1" align="center" sx={{ color: 'text.secondary' }}>
+            <Typography
+              variant="body1"
+              align="center"
+              sx={{ color: "text.secondary" }}
+            >
               Don't have an account?{" "}
               <Link
                 component={RouterLink}
                 to="/register"
                 sx={{
-                  textDecoration: 'none',
+                  textDecoration: "none",
                   fontWeight: 600,
-                  '&:hover': {
-                    textDecoration: 'underline',
+                  "&:hover": {
+                    textDecoration: "underline",
                   },
                 }}
               >
@@ -193,10 +197,10 @@ const Login = () => {
         open={!!error}
         autoHideDuration={6000}
         onClose={() => setError("")}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
-        <Alert 
-          severity="error" 
+        <Alert
+          severity="error"
           onClose={() => setError("")}
           variant="filled"
           elevation={6}

@@ -32,16 +32,11 @@ const userSchema = new mongoose.Schema(
     },
     userType: {
       type: String,
-      enum: ["restaurant", "ngo", "delivery_agent", "admin"],
+      enum: ["donor", "agent", "admin"],
       required: true,
     },
     phone: {
       type: String,
-    },
-    status: {
-      type: String,
-      enum: ["pending", "active", "suspended"],
-      default: "pending",
     },
   },
   {
@@ -53,11 +48,10 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("User", userSchema);
 
 // Create discriminator models for different user types
-const Restaurant = User.discriminator(
-  "restaurant",
+const Donor = User.discriminator(
+  "donor",
   new mongoose.Schema({
     businessName: String,
-    businessLicense: String,
     operatingHours: {
       start: String,
       end: String,
@@ -66,35 +60,16 @@ const Restaurant = User.discriminator(
   })
 );
 
-const NGO = User.discriminator(
-  "ngo",
+// Agents are users who will get the donations from donors
+const Agent = User.discriminator(
+  "agent",
   new mongoose.Schema({
-    registrationNumber: String,
-    capacity: Number,
-    serviceAreas: [
-      {
-        pincode: String,
-        radius: Number,
-      },
-    ],
+    businessName: String,
     operatingHours: {
       start: String,
       end: String,
     },
     location: locationSchema,
-  })
-);
-
-const DeliveryAgent = User.discriminator(
-  "delivery_agent",
-  new mongoose.Schema({
-    vehicleType: String,
-    vehicleNumber: String,
-    availability: {
-      type: Boolean,
-      default: false,
-    },
-    currentLocation: locationSchema,
     activeDeliveries: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -106,6 +81,5 @@ const DeliveryAgent = User.discriminator(
 
 // Create indexes
 userSchema.index({ "location.coordinates": "2dsphere" });
-userSchema.index({ status: 1 });
 
-export { User, Restaurant, NGO, DeliveryAgent };
+export { User, Donor, Agent };

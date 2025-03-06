@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -10,51 +10,52 @@ import {
   MenuItem,
   Badge,
   Avatar,
+  Button,
   alpha,
   styled,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Search as SearchIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
-    width: 'auto',
+    width: "auto",
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
+  color: "inherit",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
     },
   },
 }));
@@ -62,7 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Header = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -73,19 +74,19 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    navigate('/login');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    navigate("/login");
     handleClose();
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
     handleClose();
   };
 
   const handleNotifications = () => {
-    navigate('/notifications');
+    navigate("/notifications");
   };
 
   return (
@@ -95,8 +96,8 @@ const Header = () => {
           variant="h6"
           noWrap
           component="div"
-          sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
-          onClick={() => navigate('/home')}
+          sx={{ display: { xs: "none", sm: "block" }, cursor: "pointer" }}
+          onClick={() => navigate("/home")}
         >
           Food Helpline
         </Typography>
@@ -107,7 +108,7 @@ const Header = () => {
           </SearchIconWrapper>
           <StyledInputBase
             placeholder="Search..."
-            inputProps={{ 'aria-label': 'search' }}
+            inputProps={{ "aria-label": "search" }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -115,7 +116,17 @@ const Header = () => {
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Button color="inherit" onClick={() => navigate("/donor")}>
+          Donor
+        </Button>
+        <Button color="inherit" onClick={() => navigate("/agent")}>
+          Agent
+        </Button>
+        <Button color="inherit" onClick={() => navigate("/admin")}>
+          Admin
+        </Button>
+
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <IconButton
             size="large"
             color="inherit"
@@ -142,13 +153,13 @@ const Header = () => {
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
+              vertical: "bottom",
+              horizontal: "right",
             }}
             keepMounted
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             open={Boolean(anchorEl)}
             onClose={handleClose}
@@ -162,4 +173,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

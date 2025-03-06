@@ -1,0 +1,27 @@
+User login page
+If not registered then create account
+    Enter details
+    Select user types // admin/donor/agent
+    send data to server
+
+Admin/
+Change setting
+To check total donor data /to check total agent data
+
+
+Donor/
+Add food
+Update user data
+Update food details
+In Donar interface – donor add food or update food details  
+To send food information to nearest NGO to pickup food delivary
+
+
+Agent/
+Select food and Request food 
+
+Pickup food delivery to nearest Donor/resturent to use google map gps 
+
+Donor/ received food  request from agent 
+
+ Review or Feedback

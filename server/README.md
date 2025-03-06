@@ -2,26 +2,6 @@
 
 The backend server for the Food Helpline project, built with Node.js, Express.js, and MongoDB.
 
-## 🎯 Features
-
-- **RESTful API**
-  - Clean architecture
-  - Modular design
-  - Comprehensive error handling
-  - Request validation
-
-- **Authentication & Authorization**
-  - JWT-based authentication
-  - Role-based access control
-  - Password hashing with bcrypt
-  - Token management
-
-- **Database**
-  - MongoDB with Mongoose ODM
-  - Efficient indexing
-  - Data validation
-  - Relationship management
-
 ## 📂 Project Structure
 
 ```
@@ -49,44 +29,12 @@ server/
 └── README.md           # This file
 ```
 
-## 🔧 Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- npm (Node Package Manager)
-
-## 🚀 Getting Started
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-3. **Start the server**
-   ```bash
-   # Development mode
-   npm run dev
-   
-   # Production mode
-   npm start
-   ```
-
-## 📝 Available Scripts
-
-- `npm start` - Start the server in production mode
-- `npm run dev` - Start the server in development mode with nodemon
-- `npm test` - Run tests (to be implemented)
-
 ## 🔌 API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - Register new user
+
   ```json
   {
     "name": "John Doe",
@@ -105,6 +53,7 @@ server/
   ```
 
 ### Food Items
+
 - `POST /api/food-items` - Log new food item
 - `GET /api/food-items` - List available food items
 - `GET /api/food-items/:id` - Get food item details
@@ -112,6 +61,7 @@ server/
 - `DELETE /api/food-items/:id` - Delete food item
 
 ### Donations
+
 - `POST /api/donations` - Create donation request
 - `GET /api/donations` - List donations
 - `GET /api/donations/:id` - Get donation details
@@ -119,51 +69,9 @@ server/
 
 ## 📊 Database Schema
 
-### User Model
-```javascript
-{
-  name: String,
-  email: String,
-  password: String,
-  role: String,
-  phone: String,
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    zipCode: String
-  }
-}
-```
-
-### FoodItem Model
-```javascript
-{
-  donor: ObjectId,
-  name: String,
-  type: String,
-  quantity: {
-    amount: Number,
-    unit: String
-  },
-  expirationDate: Date,
-  status: String
-}
-```
-
-### Donation Model
-```javascript
-{
-  foodItem: ObjectId,
-  donor: ObjectId,
-  recipient: ObjectId,
-  status: String,
-  pickupSchedule: {
-    scheduledDate: Date,
-    actualPickupDate: Date
-  }
-}
-```
+- [User Model](./models/User.js)
+- [FoodItem Model](./models/FoodItem.js)
+- [Donation Model](./models/Donation.js)
 
 ## 🔒 Security
 
@@ -177,6 +85,7 @@ server/
 ## 🧪 Testing
 
 To be implemented:
+
 - Unit tests with Jest
 - Integration tests
 - API endpoint tests
@@ -201,5 +110,6 @@ To be implemented:
 ## 📞 Support
 
 For backend-specific issues or questions, please contact:
+
 - Email: backend@foodhelpline.com
-- GitHub Issues: [Create New Issue](https://github.com/yourusername/food-helpline/issues) 
+- GitHub Issues: [Create New Issue](https://github.com/yourusername/food-helpline/issues)

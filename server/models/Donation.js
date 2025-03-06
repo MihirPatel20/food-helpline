@@ -1,92 +1,72 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
-const donationSchema = new mongoose.Schema({
+const donationSchema = new mongoose.Schema(
+  {
     donor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    foodItems: [{
-        item: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'FoodItem',
-            required: true
-        },
-        quantity: {
-            amount: Number,
-            unit: String
-        }
-    }],
+    foodItem: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FoodItem",
+    },
+
     status: {
-        type: String,
-        enum: ['pending', 'matched', 'assigned', 'picked_up', 'delivered', 'cancelled'],
-        default: 'pending'
-    },
-    matchedNGO: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: String,
+      enum: ["available", "reserved", "donated", "cancelled"],
+      default: "available",
     },
     deliveryAgent: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
-    pickupWindow: {
-        start: {
-            type: Date,
-            required: true
-        },
-        end: {
-            type: Date,
-            required: true
-        }
+    pickupAddress: {
+      type: String,
+      required: true,
     },
     actualPickup: {
-        time: Date,
-        signature: String,
-        photo: String
+      time: Date,
+      signature: String,
+      photo: String,
     },
     delivery: {
-        time: Date,
-        signature: String,
-        photo: String
+      time: Date,
+      signature: String,
+      photo: String,
     },
-    ratings: [{
+    notes: String,
+    ratings: [
+      {
         ratedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
         },
         rating: {
-            type: Number,
-            min: 1,
-            max: 5
+          type: Number,
+          min: 1,
+          max: 5,
         },
         comment: String,
         createdAt: {
-            type: Date,
-            default: Date.now
-        }
-    }],
-    specialInstructions: String,
-    cancellationReason: String,
-    disputeDetails: {
-        status: {
-            type: String,
-            enum: ['none', 'open', 'resolved'],
-            default: 'none'
+          type: Date,
+          default: Date.now,
         },
-        description: String,
-        resolution: String
-    }
-}, {
-    timestamps: true
-});
+      },
+    ],
+    specialInstructions: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // Create indexes
 donationSchema.index({ status: 1 });
 donationSchema.index({ donor: 1 });
-donationSchema.index({ matchedNGO: 1 });
 donationSchema.index({ deliveryAgent: 1 });
-donationSchema.index({ "pickupWindow.start": 1 });
-donationSchema.index({ "disputeDetails.status": 1 });
+donationSchema.index({ "pickupTimeWindow.start": 1 });
 
-module.exports = mongoose.model('Donation', donationSchema); 
+const Donation = mongoose.model("Donation", donationSchema);
+
+export { Donation };

@@ -14,6 +14,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import HomePage from "./pages/home/HomePage";
 import theme from "./theme";
+import Donor from "./pages/Donor";
+import Agent from "./pages/Agent";
+import Admin from "./pages/Admin";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 function App() {
   return (
@@ -31,6 +35,46 @@ function App() {
             element={
               <ProtectedRoute>
                 <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/donor"
+            element={
+              <ProtectedRoute>
+                <Donor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/agent"
+            element={
+              <ProtectedRoute>
+                <Agent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <div>Notifications Will be shown here</div>
               </ProtectedRoute>
             }
           />

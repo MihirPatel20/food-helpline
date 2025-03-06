@@ -1,57 +1,41 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const foodItemSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    category: {
-        type: String,
-        enum: ['cooked', 'packaged', 'produce', 'dairy', 'grains'],
-        required: true
-    },
-    quantity: {
-        amount: {
-            type: Number,
-            required: true,
-            min: 0
-        },
-        unit: {
-            type: String,
-            required: true,
-            enum: ['kg', 'items', 'servings', 'liters']
-        }
-    },
-    preparationTime: {
-        type: Date,
-        required: true
-    },
-    expiryTime: {
-        type: Date,
-        required: true
-    },
-    storageInstructions: String,
-    allergenInfo: [String],
-    nutritionalInfo: {
-        calories: Number,
-        proteins: Number,
-        carbohydrates: Number,
-        fats: Number
-    },
-    packagingDetails: String,
-    status: {
-        type: String,
-        enum: ['available', 'reserved', 'collected', 'expired'],
-        default: 'available'
-    }
-}, {
-    timestamps: true
+  foodName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  foodType: {
+    type: String,
+    enum: ["cooked", "packaged", "produce", "dairy", "grains"],
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  quantityUnit: {
+    type: String,
+    required: true,
+    enum: ["kilograms", "items", "servings", "liters", "pounds", "packages"],
+  },
+  expiryDate: {
+    type: Date,
+    required: true,
+  },
+  storageInstructions: String,
+  allergenInfo: [String],
+  nutritionalInfo: {
+    calories: Number,
+    proteins: Number,
+    carbohydrates: Number,
+    fats: Number,
+  },
+  packagingDetails: String,
 });
 
-// Create indexes
-foodItemSchema.index({ category: 1 });
-foodItemSchema.index({ status: 1 });
-foodItemSchema.index({ expiryTime: 1 });
+const FoodItem = mongoose.model("FoodItem", foodItemSchema);
 
-module.exports = mongoose.model('FoodItem', foodItemSchema); 
+export { FoodItem };

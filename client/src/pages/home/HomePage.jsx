@@ -33,6 +33,8 @@ import {
 import Header from "@/components/Header";
 import { useNavigate } from "react-router-dom";
 import { activityFeed, expiringItems } from "./dummyData";
+import api, { authApi } from "../../services/api";
+import DonationCard from "../DonationCard";
 
 // Brand colors
 const brandColors = {
@@ -44,15 +46,36 @@ const brandColors = {
 };
 
 const HomePage = () => {
+  const user = authApi.getUser();
+  const [donations, setDonations] = useState([]);
   const navigate = useNavigate();
   const [actionSearchQuery, setActionSearchQuery] = useState("");
   const [userData, setUserData] = useState({
-    name: "John",
+    name: user.name,
     totalItems: 120,
     expiringItems: 5,
     moneySaved: 250,
     totalDonations: 75, // New stat for total donations
   });
+
+  const fetchDonations = async () => {
+    try {
+      const response = await api.get("/donations/all");
+
+      setDonations(response.data.donations);
+    } catch (error) {
+      console.error("Error fetching donations:", error);
+      setNotification({
+        open: true,
+        message: "Failed to fetch donations",
+        severity: "error",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
 
   const quickStats = [
     {
@@ -165,22 +188,60 @@ const HomePage = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <Header />
-
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
-        {/* Personal Welcome + Daily Summary */}
-        <Paper
-          sx={{
-            p: 3,
-            mb: 3,
-            background: `linear-gradient(45deg, ${brandColors.secondary}15, ${brandColors.warning}15)`,
-            borderLeft: `4px solid ${brandColors.secondary}`,
-          }}
-        >
-          <Typography variant="h4">
-            *Note: The data displayed here is for demonstration purposes only.*
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Total Donation Summary
           </Typography>
-        </Paper>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={4}>
+              <Card sx={{ bgcolor: "#e3f2fd", height: "100%" }}>
+                <CardContent>
+                  <Typography variant="h6" color="primary">
+                    Total Donations
+                  </Typography>
+                  <Typography variant="h3">{donations.length}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card sx={{ bgcolor: "#e8f5e9", height: "100%" }}>
+                <CardContent>
+                  <Typography variant="h6" color="success.main">
+                    Available
+                  </Typography>
+                  <Typography variant="h3">
+                    {donations.filter((d) => d.status === "available").length}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card sx={{ bgcolor: "#fff3e0", height: "100%" }}>
+                <CardContent>
+                  <Typography variant="h6" color="warning.main">
+                    Pending/Completed
+                  </Typography>
+                  <Typography variant="h3">
+                    {
+                      donations.filter(
+                        (d) =>
+                          d.status === "pending" || d.status === "completed"
+                      ).length
+                    }
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Grid container spacing={3} mb={4}>
+          {donations.map((donation) => (
+            <DonationCard donation={donation} key={donation._id} />
+          ))}
+        </Grid>
+
         <Paper
           sx={{
             p: 3,

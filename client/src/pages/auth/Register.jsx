@@ -28,7 +28,7 @@ import {
   VisibilityOff,
   Business 
 } from '@mui/icons-material';
-import { authService } from '../../services/api';
+import { authApi } from '../../services/api';
 
 const Register = () => {
   const theme = useTheme();
@@ -84,7 +84,7 @@ const Register = () => {
         userType: formData.userType
       };
       
-      await authService.register(registrationData);
+      await authApi.register(registrationData);
       navigate('/home');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to register. Please try again.');
@@ -185,9 +185,9 @@ const Register = () => {
                   </InputAdornment>
                 }
               >
-                <MenuItem value="restaurant">Restaurant</MenuItem>
-                <MenuItem value="ngo">NGO</MenuItem>
-                <MenuItem value="delivery_agent">Delivery Agent</MenuItem>
+                <MenuItem value="donor">Donor</MenuItem>
+                <MenuItem value="agent">Agent</MenuItem>
+                <MenuItem value="admin">Admin</MenuItem>
               </Select>
             </FormControl>
             <TextField
